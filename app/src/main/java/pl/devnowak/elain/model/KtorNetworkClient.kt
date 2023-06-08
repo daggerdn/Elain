@@ -26,8 +26,12 @@ class KtorNetworkClient : NetworkClient {
         }
     }
 
-    override suspend fun getList(count: Int): List<ShelterEntity> {
+    override suspend fun getShelters(count: Int): List<ShelterEntity> {
         return client.get("http://45.148.29.215/shelters/$count").body()
+    }
+
+    override suspend fun getKennels(count: Int): List<KennelEntity> {
+        return client.get("http://45.148.29.215/kennels/$count").body()
     }
 
     override suspend fun getDetails(): ShelterEntity {

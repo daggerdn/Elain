@@ -1,4 +1,4 @@
-package pl.devnowak.elain.screens
+package pl.devnowak.elain.screens.shared
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

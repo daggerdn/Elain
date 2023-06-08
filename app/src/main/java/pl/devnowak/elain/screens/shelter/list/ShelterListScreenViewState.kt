@@ -1,4 +1,4 @@
-package pl.devnowak.elain.screens.shelterlist
+package pl.devnowak.elain.screens.shelter.list
 
 import pl.devnowak.elain.model.ShelterEntity
 

@@ -9,8 +9,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 @Parcelize
-@Entity(tableName = "shelter")
-data class ShelterEntity(
+@Entity(tableName = "kennel")
+data class KennelEntity(
     @PrimaryKey val id: Int,
     @ColumnInfo(name ="name") val name: String,
     @ColumnInfo(name = "description") val description: String

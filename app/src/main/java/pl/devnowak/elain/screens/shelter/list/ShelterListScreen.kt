@@ -1,4 +1,4 @@
-package pl.devnowak.elain.ui
+package pl.devnowak.elain.screens.shelter.list
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -6,23 +6,18 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import org.koin.java.KoinJavaComponent.inject
-import pl.devnowak.elain.screens.SharedViewModel
-import pl.devnowak.elain.screens.shelterlist.ShelterListScreenViewModel
-import pl.devnowak.elain.screens.shelterlist.ShelterListScreenViewState
+import org.koin.java.KoinJavaComponent
 import pl.devnowak.elain.model.ShelterEntity
-import pl.devnowak.elain.usecases.FetchShelterUseCase
+import pl.devnowak.elain.screens.shared.SharedViewModel
+import pl.devnowak.elain.ui.SearchBarEx
 import timber.log.Timber
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -30,11 +25,11 @@ import timber.log.Timber
 fun ShelterListScreen(
     navController: NavHostController,
     sharedViewModel: SharedViewModel,
-    navigateToDetails: () -> Unit
+    navigateToDetails: (Int) -> Unit
 
 ) {
 
-    val useCase: FetchShelterUseCase by inject(FetchShelterUseCase::class.java)
+    val useCase: FetchShelterUseCase by KoinJavaComponent.inject(FetchShelterUseCase::class.java)
 
     val viewModel: ShelterListScreenViewModel = remember {
         ShelterListScreenViewModel(useCase = useCase)
@@ -67,6 +62,8 @@ fun ShelterListScreen(
             )
         }
         is ShelterListScreenViewState.Completed -> {
+            SearchBarEx()
+            Spacer(modifier = Modifier.size(10.dp))
             LazyColumn {
                 items(value.data) {
                     Card(
@@ -88,7 +85,7 @@ fun ShelterListScreen(
 //                                key = "entity",
 //                                value = entity
 //                            )
-                            navigateToDetails()
+                            navigateToDetails(entity.id)
                         }
                     ) {
                         Text(
@@ -100,57 +97,5 @@ fun ShelterListScreen(
                 }
             }
         }
-    }
-}
-
-@Composable
-fun ShelterDetailsScreen(
-    navController: NavHostController,
-    sharedViewModel: SharedViewModel
-) {
-
-    val entity = sharedViewModel.entity
-    LaunchedEffect(key1 = entity) {
-        if(entity != null) {
-            Timber.tag("DetailsScreen")
-            Timber.d("${entity?.id}")
-            Timber.tag("DetailsScreen")
-            Timber.d("${entity?.name}")
-            Timber.tag("DetailsScreen")
-            Timber.d("${entity?.description}")
-        }
-    }
-
-    
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .clickable { },
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = "${entity?.id}",
-            style = TextStyle(
-                fontSize = MaterialTheme.typography.h3.fontSize,
-                fontWeight = FontWeight.Bold
-            )
-        )
-        Spacer(modifier = Modifier.size(10.dp))
-        Text(
-            text = "${entity?.name}",
-            style = TextStyle(
-                fontSize = MaterialTheme.typography.h3.fontSize,
-                fontWeight = FontWeight.Bold
-            )
-        )
-        Spacer(modifier = Modifier.size(10.dp))
-        Text(
-            text = "${entity?.description}",
-            style = TextStyle(
-                fontSize = MaterialTheme.typography.h3.fontSize,
-                fontWeight = FontWeight.Bold
-            )
-        )
     }
 }
